@@ -11,7 +11,6 @@ namespace TemSharp
         void OnEnable()
         {
             var spawnZoneDefList = typeof(WildMonstersLogic).GetField<WildMonstersLogic>().GetField<HashSet<SpawnZoneDefinition>>();
-            Vector3 vector = Temtem.Players.LocalPlayerAvatar.nkqrjhelndm.qqhqkomhdoq;
             foreach (var spawnZoneDef in spawnZoneDefList)
             {
                 InitialZoneValues[spawnZoneDef.GetField<Int16>("id") + spawnZoneDef.GetField<Int16>("sceneId") + spawnZoneDef.GetField<String>("battleZone")] = spawnZoneDef.GetField<SpawnZoneDefinition.mjoookiqrfh>();
@@ -21,7 +20,6 @@ namespace TemSharp
         void OnDisable()
         {
             var spawnZoneDefList = typeof(WildMonstersLogic).GetField<WildMonstersLogic>().GetField<HashSet<SpawnZoneDefinition>>();
-            Vector3 vector = Temtem.Players.LocalPlayerAvatar.nkqrjhelndm.qqhqkomhdoq;
             foreach (var spawnZoneDef in spawnZoneDefList)
             {
                 var key = spawnZoneDef.GetField<Int16>("id") + spawnZoneDef.GetField<Int16>("sceneId") + spawnZoneDef.GetField<String>("battleZone");

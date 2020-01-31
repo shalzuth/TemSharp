@@ -15,6 +15,20 @@ namespace TemSharp
         Int32 tick = 0;
         Boolean delayNextBattle = true;
         Boolean needToEnterBattle = true;
+        SpawnZoneDefinition GetSpawnZone()
+        {
+            var spawnZoneDefList = typeof(WildMonstersLogic).GetField<WildMonstersLogic>().GetField<HashSet<SpawnZoneDefinition>>();
+            var vector = Temtem.Players.LocalPlayerAvatar.nkqrjhelndm.qqhqkomhdoq;
+            foreach (var spawnZoneDef in spawnZoneDefList)
+            {
+                //Debug.Log(spawnZoneDef.GetField<Int16>("id"));
+                if (spawnZoneDef.hdmighhrhpl(vector))
+                {
+                    return spawnZoneDef;
+                }
+            }
+            return null;
+        }
         void Update()
         {
             var minimap = FindObjectsOfType<Temtem.UI.MinimapFogController>().FirstOrDefault();
@@ -30,8 +44,9 @@ namespace TemSharp
                     typeof(Temtem.Network.NetworkLogic).GetField<SmartFox>().Send(new ExtensionRequest("gameplay.HealTeam", new SFSObject()));
                     needToEnterBattle = false;
                     var isfsobject = new SFSObject();
-                    isfsobject.PutShort("sid", 1);
-                    isfsobject.PutShort("spid", 0);
+                    var zone = GetSpawnZone();
+                    isfsobject.PutShort("sid", zone.GetField<Int16>("sceneId"));
+                    isfsobject.PutShort("spid", zone.GetField<Int16>("id"));
                     typeof(Temtem.Network.NetworkLogic).GetField<SmartFox>().Send(new ExtensionRequest("spawnMonster", isfsobject));
                 }
             }
