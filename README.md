@@ -47,4 +47,4 @@ I probably won't mix them.
 
 MIT License
 
-*Temtem and Shalzuth aren't endorsed by CremaGames S.L., Crema and doesn’t reflect the views or opinions of CremaGames S.L., Crema or anyone officially involved in producing or managing CremaGames S.L., Crema. Game content and materials are trademarks and copyrights of CremaGames S.L., Crema*
+*Temsharp and Shalzuth aren't endorsed by CremaGames S.L., Crema and doesn’t reflect the views or opinions of CremaGames S.L., Crema or anyone officially involved in producing or managing CremaGames S.L., Crema. Game content and materials are trademarks and copyrights of CremaGames S.L., Crema*
