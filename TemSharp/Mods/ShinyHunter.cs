@@ -50,19 +50,21 @@ namespace TemSharp
                     typeof(Temtem.Network.NetworkLogic).GetField<SmartFox>().Send(new ExtensionRequest("spawnMonster", isfsobject));
                 }
             }
+           // var button = FindObjectsOfType<Temtem.UI.BattleButtonTechUI>().FirstOrDefault(b => b.name == "BattleTechniqueButton");
             var button = FindObjectsOfType<Temtem.UI.BattleButtonRestSwapBagRunUI>().FirstOrDefault(b => b.name == "Run");
             if (button != null && button.gameObject.activeInHierarchy)
             {
-                var monsters = typeof(Temtem.Battle.BattleClient).GetField<Temtem.Battle.BattleClient>().GetField<Temtem.Monsters.firikfgomje[]>();
+                var monsters = typeof(Temtem.Battle.BattleClient).GetField<Temtem.Battle.BattleClient>().GetField<temtem.networkserialized.NetworkBattleMonster[]>("jhfmqrkmgep");
                 foreach (var monster in monsters)
                 {
                     if (monster == null) continue;
-                    if (monster.hpfkeknnqiq)
+                    if (monster.luma)
                     {
                         enabled = false;
                         return;
                     }
                     //Debug.Log(monster.rjflhcnqnif.OriginalName + " : " + (monster.hpfkeknnqiq ? "Shiny" : "Normal"));
+                    //Debug.Log(monster.Nickname + " : " +monster.ToString());
                 }
 
                 delayNextBattle = needToEnterBattle = true;
