@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Temtem.Core;
+using Temtem.UI;
 using Temtem.World;
 using Sfs2X;
 using Sfs2X.Entities.Data;
@@ -21,13 +22,31 @@ namespace TemSharp
             var vector = Temtem.Players.LocalPlayerAvatar.nkqrjhelndm.qqhqkomhdoq;
             foreach (var spawnZoneDef in spawnZoneDefList)
             {
-                //Debug.Log(spawnZoneDef.GetField<Int16>("id"));
                 if (spawnZoneDef.hdmighhrhpl(vector))
-                {
                     return spawnZoneDef;
-                }
             }
             return null;
+        }
+        static Int32 Margin = 5;
+        static Int32 WindowWidth = 150;
+        Int32 ShinyId;
+        Rect ShinyWindow = new Rect(Margin + WindowWidth + Margin, Margin, WindowWidth, 50);
+        void Awake()
+        {
+            ShinyId = GetHashCode();
+        }
+        void OnGUI()
+        {
+            if (Cursor.visible)
+            {
+                ShinyWindow = GUILayout.Window(ShinyId, ShinyWindow, ShinyWindowMethod, "shiny hunter settings", GUILayout.ExpandHeight(true));
+            }
+        }
+        Boolean fight = true;
+        void ShinyWindowMethod(Int32 id)
+        {
+            fight = GUILayout.Toggle(fight, fight ? "Fight" : "Flee");
+            GUI.DragWindow();
         }
         void Update()
         {
@@ -50,8 +69,9 @@ namespace TemSharp
                     typeof(Temtem.Network.NetworkLogic).GetField<SmartFox>().Send(new ExtensionRequest("spawnMonster", isfsobject));
                 }
             }
-           // var button = FindObjectsOfType<Temtem.UI.BattleButtonTechUI>().FirstOrDefault(b => b.name == "BattleTechniqueButton");
-            var button = FindObjectsOfType<Temtem.UI.BattleButtonRestSwapBagRunUI>().FirstOrDefault(b => b.name == "Run");
+            UIButton button;
+            if (fight) button = FindObjectsOfType<BattleButtonTechUI>().FirstOrDefault(b => b.name == "BattleTechniqueButton");
+            else button = FindObjectsOfType<BattleButtonRestSwapBagRunUI>().FirstOrDefault(b => b.name == "Run");
             if (button != null && button.gameObject.activeInHierarchy)
             {
                 var monsters = typeof(Temtem.Battle.BattleClient).GetField<Temtem.Battle.BattleClient>().GetField<temtem.networkserialized.NetworkBattleMonster[]>("jhfmqrkmgep");
@@ -68,8 +88,25 @@ namespace TemSharp
                 }
 
                 delayNextBattle = needToEnterBattle = true;
-                var clickButton = button.gameObject.GetComponent<UnityEngine.UI.Button>();
-                clickButton.OnPointerClick(new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left });
+                button.gameObject.GetComponent<UnityEngine.UI.Button>().onClick.Invoke();
+            }
+            var nameplate = FindObjectsOfType<BattleButtonStatsUI>().FirstOrDefault();
+            if (nameplate != null && nameplate.gameObject.activeInHierarchy)
+            {
+                var fullName = nameplate.transform.name;
+                var parentTransform = nameplate.gameObject.transform;
+                while (parentTransform != null)
+                {
+                    fullName = parentTransform.name + "/" + fullName;
+                    parentTransform = parentTransform.parent;
+                }
+                if (fullName.Contains("Rival"))
+                    nameplate.gameObject.GetComponent<UnityEngine.UI.Button>().onClick.Invoke();
+            }
+            var report = typeof(SystemReportUI).GetField<SystemReportUI>().GetField<GameObject>("acceptGO");
+            if (report.activeInHierarchy)
+            {
+                typeof(SystemReportUI).GetField<SystemReportUI>().Invoke("qminholrkqm");
             }
         }
     }
