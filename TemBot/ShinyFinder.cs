@@ -321,7 +321,7 @@ namespace TemBot
 							{
 								battleTicks.Add(Environment.TickCount);
 								battleTimes.Add(battleTicks.Last() - battleTicks[battleTicks.Count - 2]);
-								Console.WriteLine(DateTime.Now + " : new battle, last battle time " + (battleTimes.Last()/1000.0f) + ", average time " + battleTimes.Average()/1000.0f);
+								Console.WriteLine(DateTime.Now + " : new battle, last battle time " + (battleTimes.Last() / 1000.0f) + ", average time " + battleTimes.Average() / 1000.0f);
 								fleed = true;
 								while (fleeBug) { }
 								fleeBug = true;

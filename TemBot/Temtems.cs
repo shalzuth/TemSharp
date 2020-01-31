@@ -19,7 +19,7 @@ namespace TemBot
                 {
                     var temtems = JsonSerializer.Deserialize<List<TemtemInfo>>(Properties.Resources.Temtems);
                     _allTemtems = new Dictionary<Int64, TemtemInfo>();
-                    foreach(var temtem in temtems)
+                    foreach (var temtem in temtems)
                     {
                         _allTemtems.Add(temtem.id, temtem);
                     }

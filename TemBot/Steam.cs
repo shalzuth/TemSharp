@@ -7,7 +7,7 @@ using Steamworks;
 
 namespace TemBot
 {
-    public static class Steam
+	public static class Steam
 	{
 		public static String SessionTicket = "";
 		public static void InitSteam()
