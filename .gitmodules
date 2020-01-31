@@ -1,0 +1,3 @@
+[submodule "SharpMonoInjector"]
+	path = SharpMonoInjector
+	url = https://github.com/warbler/SharpMonoInjector
