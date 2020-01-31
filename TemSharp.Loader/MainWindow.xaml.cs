@@ -53,7 +53,7 @@ namespace TemSharp.Loader
                 gameProc = System.Diagnostics.Process.GetProcessesByName(gameProcName);
             }
             Status.Text = "Game Open - Injecting";
-            //try
+            try
             {
                 String randString = "aa" + Guid.NewGuid().ToString().Substring(0, 8);
                 var q = gameProc[0].MainModule;
@@ -71,9 +71,9 @@ namespace TemSharp.Loader
                 //Thread.Sleep(10000);
                 Environment.Exit(0);
             }
-            //catch (Exception e)
+            catch (Exception e)
             {
-               // Status.Text = e.Message;
+                Status.Text = e.Message;
             }
         }
     }

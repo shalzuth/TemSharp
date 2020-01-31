@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TemSharp.Loader"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" ShowInTaskbar="False" Visibility="Hidden">
+        Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Label Content="{Binding Path=(local:Status.Text)}" HorizontalAlignment="Left" Margin="45,66,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
