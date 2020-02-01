@@ -15,6 +15,10 @@ namespace TemSharp
                 Temtem.Network.NetworkLogic.nkqrjhelndm.elennjqknrp(Temtem.Network.NetworkLogic.nkqrjhelndm.npqcecmqpio, new Vector3(position.x, position.y, position.z + 5));
             if (Input.GetKeyDown(KeyCode.Keypad2))
                 Temtem.Network.NetworkLogic.nkqrjhelndm.elennjqknrp(Temtem.Network.NetworkLogic.nkqrjhelndm.npqcecmqpio, new Vector3(position.x, position.y, position.z - 5));
+            if (Input.GetKeyDown(KeyCode.Keypad1))
+                Temtem.Network.NetworkLogic.nkqrjhelndm.elennjqknrp(Temtem.Network.NetworkLogic.nkqrjhelndm.npqcecmqpio, new Vector3(position.x, position.y + 5, position.z));
+            if (Input.GetKeyDown(KeyCode.Keypad3))
+                Temtem.Network.NetworkLogic.nkqrjhelndm.elennjqknrp(Temtem.Network.NetworkLogic.nkqrjhelndm.npqcecmqpio, new Vector3(position.x, position.y - 5, position.z));
         }
     }
 }

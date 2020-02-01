@@ -20,7 +20,7 @@ namespace TemSharp.Loader.Core
             Console.WriteLine("Getting latest version info from Github");
             System.Net.WebClient wc = new System.Net.WebClient();
             String hash = wc.DownloadString($"https://github.com/shalzuth/{ProjName}/tree/master/{ProjName}");
-            String hashSearch = $"\"commit-tease-sha\" href=\"/shalzuth/{ProjName}/commit/";
+            String hashSearch = $"src=\"/shalzuth/{ProjName}/tree-commit/";
             hash = hash.Substring(hash.IndexOf(hashSearch) + hashSearch.Length, 7);
             String hashFile = $@".\{ProjName}-master\hash.txt";
             if (File.Exists(hashFile))

@@ -101,8 +101,17 @@ namespace TemSharp
             typeof(Temtem.Network.NetworkLogic).GetField<SmartFox>().Send(new ExtensionRequest("gameplay.HealTeam", new SFSObject()));
             var isfsobject = new SFSObject();
             var zone = GetSpawnZone();
-            isfsobject.PutShort("sid", zone.GetField<Int16>("sceneId"));
+
+            if (Temtem.Network.NetworkLogic.nkqrjhelndm.chdmkelfjpg != null)
+            {
+                isfsobject.PutShort("sid", Temtem.Network.NetworkLogic.nkqrjhelndm.chdmkelfjpg.glgirecgqig());
+                isfsobject.PutBool("isB", false);
+            }
+            else
+                isfsobject.PutShort("sid", zone.GetField<Int16>("sceneId"));
             isfsobject.PutShort("spid", zone.GetField<Int16>("id"));
+            if (zone is SaiparkSpawnZoneDefinition)
+                isfsobject.PutBool("sp", false);
             typeof(Temtem.Network.NetworkLogic).GetField<SmartFox>().Send(new ExtensionRequest("spawnMonster", isfsobject));
             BattleCount++;
         }
@@ -113,7 +122,8 @@ namespace TemSharp
         }
         void Update()
         {
-            var minimap = FindObjectsOfType<MinimapFogController>().FirstOrDefault();
+            var minimap = (MonoBehaviour)FindObjectsOfType<MinimapFogController>().FirstOrDefault();
+            if (minimap == null) minimap = (MonoBehaviour)FindObjectsOfType<GenericMinimap>().FirstOrDefault();
             if (minimap != null && minimap.gameObject.activeInHierarchy)
             {
                 if (needToEnterBattle)
@@ -149,13 +159,13 @@ namespace TemSharp
                             if (monster == null) continue;
                             var detailedInfo = detailMonsters[i];
                             if (monster.luma == luma
-                                && sv_hp >= (Single)detailedInfo.GetField<Int16>("hqoqompkoko")
-                                && sv_stam >= (Single)detailedInfo.GetField<Int16>("lkfqjncqjlh")
-                                && sv_atk >= (Single)detailedInfo.GetField<Int16>("feefnfjirce")
-                                && sv_def >= (Single)detailedInfo.GetField<Int16>("kgddimqgcgl")
-                                && sv_spatk >= (Single)detailedInfo.GetField<Int16>("qmnfcgkfkje")
-                                && sv_spdef >= (Single)detailedInfo.GetField<Int16>("foqcikgkjfi")
-                                && sv_speed >= (Single)detailedInfo.GetField<Int16>("ljpogjmlrhd"))
+                                && sv_hp <= (Single)detailedInfo.GetField<Int16>("hqoqompkoko")
+                                && sv_stam <= (Single)detailedInfo.GetField<Int16>("lkfqjncqjlh")
+                                && sv_atk <= (Single)detailedInfo.GetField<Int16>("feefnfjirce")
+                                && sv_def <= (Single)detailedInfo.GetField<Int16>("kgddimqgcgl")
+                                && sv_spatk <= (Single)detailedInfo.GetField<Int16>("qmnfcgkfkje")
+                                && sv_spdef <= (Single)detailedInfo.GetField<Int16>("foqcikgkjfi")
+                                && sv_speed <= (Single)detailedInfo.GetField<Int16>("ljpogjmlrhd"))
                             {
                                 enabled = false;
                                 return;
