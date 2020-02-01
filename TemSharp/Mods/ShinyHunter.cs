@@ -17,6 +17,7 @@ namespace TemSharp
         Int32 tick = 0;
         Boolean needToEnterBattle = true;
         Boolean needToCloseLevelUpDelay = true;
+        UInt64 BattleCount = 0;
         SpawnZoneDefinition GetSpawnZone()
         {
             var spawnZoneDefList = typeof(WildMonstersLogic).GetField<WildMonstersLogic>().GetField<HashSet<SpawnZoneDefinition>>();
@@ -36,6 +37,10 @@ namespace TemSharp
         {
             ShinyId = GetHashCode();
         }
+        void OnEnable()
+        {
+            tick = Environment.TickCount;
+        }
         void OnGUI()
         {
             if (Cursor.visible)
@@ -54,6 +59,8 @@ namespace TemSharp
         Single sv_speed = 0;
         void ShinyWindowMethod(Int32 id)
         {
+            GUILayout.Label("battle # " + BattleCount);
+            GUILayout.Label("average : " + ((Single)(Environment.TickCount - tick) / 1000 / (Single)BattleCount));
             fight = GUILayout.Toggle(fight, fight ? "Fight" : "Flee");
             luma = GUILayout.Toggle(luma, "Luma required");
             GUILayout.Label("sv minimums to stop");
@@ -96,6 +103,7 @@ namespace TemSharp
             isfsobject.PutShort("sid", zone.GetField<Int16>("sceneId"));
             isfsobject.PutShort("spid", zone.GetField<Int16>("id"));
             typeof(Temtem.Network.NetworkLogic).GetField<SmartFox>().Send(new ExtensionRequest("spawnMonster", isfsobject));
+            BattleCount++;
         }
         IEnumerator CloseReport(Single seconds)
         {
