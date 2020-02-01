@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -14,8 +15,8 @@ namespace TemSharp
     public class ShinyHunter : MonoBehaviour
     {
         Int32 tick = 0;
-        Boolean delayNextBattle = true;
         Boolean needToEnterBattle = true;
+        Boolean needToCloseLevelUpDelay = true;
         SpawnZoneDefinition GetSpawnZone()
         {
             var spawnZoneDefList = typeof(WildMonstersLogic).GetField<WildMonstersLogic>().GetField<HashSet<SpawnZoneDefinition>>();
@@ -43,56 +44,79 @@ namespace TemSharp
             }
         }
         Boolean fight = true;
+        Boolean luma = true;
+        Single sv_hp = 0;
+        Single sv_stam = 0;
+        Single sv_atk = 0;
+        Single sv_def = 0;
+        Single sv_spatk = 0;
+        Single sv_spdef = 0;
+        Single sv_speed = 0;
         void ShinyWindowMethod(Int32 id)
         {
             fight = GUILayout.Toggle(fight, fight ? "Fight" : "Flee");
+            luma = GUILayout.Toggle(luma, "Luma required");
+            GUILayout.Label("sv minimums to stop");
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("hp");
+            sv_hp = GUILayout.HorizontalScrollbar(sv_hp, 1, 0, 50);
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("stam");
+            sv_stam = GUILayout.HorizontalScrollbar(sv_stam, 1, 0, 50);
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("atk");
+            sv_atk = GUILayout.HorizontalScrollbar(sv_atk, 1, 0, 50);
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("def");
+            sv_def = GUILayout.HorizontalScrollbar(sv_def, 1, 0, 50);
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("spatk");
+            sv_spatk = GUILayout.HorizontalScrollbar(sv_spatk, 1, 0, 50);
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("spdef");
+            sv_spdef = GUILayout.HorizontalScrollbar(sv_spdef, 1, 0, 50);
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("speed");
+            sv_speed = GUILayout.HorizontalScrollbar(sv_speed, 1, 0, 50);
+            GUILayout.EndHorizontal();
             GUI.DragWindow();
+        }
+        IEnumerator HealAndSpawnMonster(Single seconds)
+        {
+            yield return new WaitForSeconds(seconds * Time.timeScale);
+            typeof(Temtem.Network.NetworkLogic).GetField<SmartFox>().Send(new ExtensionRequest("gameplay.HealTeam", new SFSObject()));
+            var isfsobject = new SFSObject();
+            var zone = GetSpawnZone();
+            isfsobject.PutShort("sid", zone.GetField<Int16>("sceneId"));
+            isfsobject.PutShort("spid", zone.GetField<Int16>("id"));
+            typeof(Temtem.Network.NetworkLogic).GetField<SmartFox>().Send(new ExtensionRequest("spawnMonster", isfsobject));
+        }
+        IEnumerator CloseReport(Single seconds)
+        {
+            yield return new WaitForSeconds(seconds * Time.timeScale);
+            typeof(SystemReportUI).GetField<SystemReportUI>().Invoke("qminholrkqm");
         }
         void Update()
         {
-            var minimap = FindObjectsOfType<Temtem.UI.MinimapFogController>().FirstOrDefault();
+            var minimap = FindObjectsOfType<MinimapFogController>().FirstOrDefault();
             if (minimap != null && minimap.gameObject.activeInHierarchy)
             {
-                if (delayNextBattle)
+                if (needToEnterBattle)
                 {
-                    delayNextBattle = false;
-                    tick = Environment.TickCount;
-                }
-                if (needToEnterBattle && Environment.TickCount - tick > 1000)
-                {
-                    typeof(Temtem.Network.NetworkLogic).GetField<SmartFox>().Send(new ExtensionRequest("gameplay.HealTeam", new SFSObject()));
                     needToEnterBattle = false;
-                    var isfsobject = new SFSObject();
-                    var zone = GetSpawnZone();
-                    isfsobject.PutShort("sid", zone.GetField<Int16>("sceneId"));
-                    isfsobject.PutShort("spid", zone.GetField<Int16>("id"));
-                    typeof(Temtem.Network.NetworkLogic).GetField<SmartFox>().Send(new ExtensionRequest("spawnMonster", isfsobject));
+                    StartCoroutine(HealAndSpawnMonster(0.5f));
                 }
-            }
-            UIButton button;
-            if (fight) button = FindObjectsOfType<BattleButtonTechUI>().FirstOrDefault(b => b.name == "BattleTechniqueButton");
-            else button = FindObjectsOfType<BattleButtonRestSwapBagRunUI>().FirstOrDefault(b => b.name == "Run");
-            if (button != null && button.gameObject.activeInHierarchy)
-            {
-                var monsters = typeof(Temtem.Battle.BattleClient).GetField<Temtem.Battle.BattleClient>().GetField<temtem.networkserialized.NetworkBattleMonster[]>("jhfmqrkmgep");
-                foreach (var monster in monsters)
-                {
-                    if (monster == null) continue;
-                    if (monster.luma)
-                    {
-                        enabled = false;
-                        return;
-                    }
-                    //Debug.Log(monster.rjflhcnqnif.OriginalName + " : " + (monster.hpfkeknnqiq ? "Shiny" : "Normal"));
-                    //Debug.Log(monster.Nickname + " : " +monster.ToString());
-                }
-
-                delayNextBattle = needToEnterBattle = true;
-                button.gameObject.GetComponent<UnityEngine.UI.Button>().onClick.Invoke();
             }
             var nameplate = FindObjectsOfType<BattleButtonStatsUI>().FirstOrDefault();
             if (nameplate != null && nameplate.gameObject.activeInHierarchy)
             {
+
                 var fullName = nameplate.transform.name;
                 var parentTransform = nameplate.gameObject.transform;
                 while (parentTransform != null)
@@ -101,12 +125,55 @@ namespace TemSharp
                     parentTransform = parentTransform.parent;
                 }
                 if (fullName.Contains("Rival"))
+                {
+                    UIButton button;
+                    if (fight) button = FindObjectsOfType<BattleButtonTechUI>().FirstOrDefault(b => b.name == "BattleTechniqueButton");
+                    else button = FindObjectsOfType<BattleButtonRestSwapBagRunUI>().FirstOrDefault(b => b.name == "Run");
+                    if (button != null && button.gameObject.activeInHierarchy)
+                    {
+                        var detailMonsters = typeof(Temtem.Battle.BattleClient).GetField<Temtem.Battle.BattleClient>().GetField<Temtem.Monsters.firikfgomje[]>("jrnfkcppiql");
+
+                        var monsters = typeof(Temtem.Battle.BattleClient).GetField<Temtem.Battle.BattleClient>().GetField<temtem.networkserialized.NetworkBattleMonster[]>("jhfmqrkmgep");
+                        for (var i = 0; i < monsters.Count(); i++)
+                        {
+                            var monster = monsters[i];
+                            if (monster == null) continue;
+                            var detailedInfo = detailMonsters[i];
+                            if (monster.luma)
+                            {
+
+                                if (monster.luma == luma
+                                    && sv_hp >= (Single)detailedInfo.GetField<Int16>("hqoqompkoko")
+                                    && sv_stam >= (Single)detailedInfo.GetField<Int16>("lkfqjncqjlh")
+                                    && sv_atk >= (Single)detailedInfo.GetField<Int16>("feefnfjirce")
+                                    && sv_def >= (Single)detailedInfo.GetField<Int16>("kgddimqgcgl")
+                                    && sv_spatk >= (Single)detailedInfo.GetField<Int16>("qmnfcgkfkje")
+                                    && sv_spdef >= (Single)detailedInfo.GetField<Int16>("foqcikgkjfi")
+                                    && sv_speed >= (Single)detailedInfo.GetField<Int16>("ljpogjmlrhd"))
+                                {
+                                    enabled = false;
+                                    return;
+                                }
+                            }
+                            //Debug.Log(monster.rjflhcnqnif.OriginalName + " : " + (monster.hpfkeknnqiq ? "Shiny" : "Normal"));
+                            //Debug.Log(monster.Nickname + " : " +monster.ToString());
+                        }
+                        needToCloseLevelUpDelay = needToEnterBattle = true;
+                        button.gameObject.GetComponent<UnityEngine.UI.Button>().onClick.Invoke();
+                    }
+
                     nameplate.gameObject.GetComponent<UnityEngine.UI.Button>().onClick.Invoke();
+                }
             }
             var report = typeof(SystemReportUI).GetField<SystemReportUI>().GetField<GameObject>("acceptGO");
-            if (report.activeInHierarchy)
+            if (report.activeInHierarchy && (nameplate == null || !nameplate.gameObject.activeInHierarchy))
             {
-                typeof(SystemReportUI).GetField<SystemReportUI>().Invoke("qminholrkqm");
+                if (needToCloseLevelUpDelay)
+                {
+                    needToCloseLevelUpDelay = false;
+                    StartCoroutine(CloseReport(0.5f));
+                }
+                    
             }
         }
     }

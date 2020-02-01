@@ -74,6 +74,7 @@
     <Compile Include="Mods\Heal.cs" />
     <Compile Include="Init.cs" />
     <Compile Include="Common\Menu.cs" />
+    <Compile Include="Mods\MonsterInfo.cs" />
     <Compile Include="Mods\RemoveName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Reflection.cs" />
