@@ -7,6 +7,9 @@
 ## Available Mods
 - Disable Fights
 - Heal
+- Monster Info
+- Open Bank
+- Open Shop
 - Shiny Hunter
 - Speed
 - Teleporter
@@ -18,23 +21,35 @@ Only works in grass. Working on Trainer fight bypassing.
 ## Heal
 Heals your little guys up to full.
 
+## Monster Info
+Shows SV info in battle.
+
+## Open Bank
+Swap your Temtems on the fly.
+
+## Open Shop
+Forget pokeballs? Buy them on the fly.
+
 ## Shiny Hunter
 Start mod in grass.
 Mod will:
 * Start fight
-* Flee
-* Repeat until a Shiny Pokeman is found
-
-TODO - Add stopping on specific enemy, with specified SV
+* Fight or Flee
+* Repeat until a Shiny Pokeman is found, or minimum SV values are found
 
 ## Speed
 Speeds up the game. Could be modified to make it go slower if there are requests.
 
 ## Teleporter
+Right Click on Map to Teleport to location (only use on World)
+
 Using the numpad, 2, 4, 6, 8 will teleport you a couple blocks away.
 
 ## Zoom
 Pulls Mr Cameraman back a bit.
+
+## Remove Name
+Removes your name from appearing on the HUD.
 
 ## Extra
 I also left a clientless project in here. Goodluck getting it to work :)

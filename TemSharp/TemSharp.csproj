@@ -56,11 +56,19 @@
     <Reference Include="UnityEngine">
       <HintPath>E:\SteamLibrary\steamapps\common\Temtem\Temtem_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\SteamLibrary\steamapps\common\Temtem\Temtem_Data\Managed\UnityEngine.AIModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>E:\SteamLibrary\steamapps\common\Temtem\Temtem_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>E:\SteamLibrary\steamapps\common\Temtem\Temtem_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\SteamLibrary\steamapps\common\Temtem\Temtem_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -75,6 +83,8 @@
     <Compile Include="Init.cs" />
     <Compile Include="Common\Menu.cs" />
     <Compile Include="Mods\MonsterInfo.cs" />
+    <Compile Include="Mods\OpenBank.cs" />
+    <Compile Include="Mods\OpenShop.cs" />
     <Compile Include="Mods\RemoveName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Reflection.cs" />
