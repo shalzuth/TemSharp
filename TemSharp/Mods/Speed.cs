@@ -5,7 +5,7 @@ namespace TemSharp
     public class Speed : MonoBehaviour
     {
         Single MinValue = 1;
-        Single MaxValue = 10;
+        Single MaxValue = 20;
         Single ScalingValue = 1;
         void OnEnable()
         {
