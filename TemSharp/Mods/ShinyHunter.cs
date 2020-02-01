@@ -40,6 +40,7 @@ namespace TemSharp
         void OnEnable()
         {
             tick = Environment.TickCount;
+            needToEnterBattle = needToCloseLevelUpDelay = true;
         }
         void OnGUI()
         {
@@ -147,21 +148,17 @@ namespace TemSharp
                             var monster = monsters[i];
                             if (monster == null) continue;
                             var detailedInfo = detailMonsters[i];
-                            if (monster.luma)
+                            if (monster.luma == luma
+                                && sv_hp >= (Single)detailedInfo.GetField<Int16>("hqoqompkoko")
+                                && sv_stam >= (Single)detailedInfo.GetField<Int16>("lkfqjncqjlh")
+                                && sv_atk >= (Single)detailedInfo.GetField<Int16>("feefnfjirce")
+                                && sv_def >= (Single)detailedInfo.GetField<Int16>("kgddimqgcgl")
+                                && sv_spatk >= (Single)detailedInfo.GetField<Int16>("qmnfcgkfkje")
+                                && sv_spdef >= (Single)detailedInfo.GetField<Int16>("foqcikgkjfi")
+                                && sv_speed >= (Single)detailedInfo.GetField<Int16>("ljpogjmlrhd"))
                             {
-
-                                if (monster.luma == luma
-                                    && sv_hp >= (Single)detailedInfo.GetField<Int16>("hqoqompkoko")
-                                    && sv_stam >= (Single)detailedInfo.GetField<Int16>("lkfqjncqjlh")
-                                    && sv_atk >= (Single)detailedInfo.GetField<Int16>("feefnfjirce")
-                                    && sv_def >= (Single)detailedInfo.GetField<Int16>("kgddimqgcgl")
-                                    && sv_spatk >= (Single)detailedInfo.GetField<Int16>("qmnfcgkfkje")
-                                    && sv_spdef >= (Single)detailedInfo.GetField<Int16>("foqcikgkjfi")
-                                    && sv_speed >= (Single)detailedInfo.GetField<Int16>("ljpogjmlrhd"))
-                                {
-                                    enabled = false;
-                                    return;
-                                }
+                                enabled = false;
+                                return;
                             }
                             //Debug.Log(monster.rjflhcnqnif.OriginalName + " : " + (monster.hpfkeknnqiq ? "Shiny" : "Normal"));
                             //Debug.Log(monster.Nickname + " : " +monster.ToString());
