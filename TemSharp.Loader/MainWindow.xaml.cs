@@ -60,6 +60,8 @@ namespace TemSharp.Loader
                 var gameDir = System.IO.Path.GetDirectoryName(gameProc[0].MainModule.FileName);
                 var gameName = System.IO.Path.GetFileName(gameDir);
                 var unityDllPath = gameDir + @"\" + gameName + @"_Data\Managed\";
+                if (!System.IO.Directory.Exists(unityDllPath))
+                    unityDllPath = gameDir + @"\" + gameProcName + @"_Data\Managed\";
                 Compiler.UnityDllPath = unityDllPath;
                 Status.Text = "Injecting - Game @ " + unityDllPath;
                 Compiler.UpdateSources();

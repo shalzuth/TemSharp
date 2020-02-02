@@ -1,9 +1,4 @@
-﻿using Sfs2X;
-using Sfs2X.Entities.Data;
-using Sfs2X.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using UnityEngine;
 namespace TemSharp
 {
@@ -14,7 +9,6 @@ namespace TemSharp
         Int32 WindowId;
         Rect WindowRect;
         GUIStyle labelStyle;
-        GUIStyle windowStyle;
         void Awake()
         {
             Width = Screen.width * 3 / 4;
@@ -24,8 +18,7 @@ namespace TemSharp
             labelStyle = new GUIStyle("label");
             labelStyle.alignment = TextAnchor.MiddleCenter;
             labelStyle.fontSize = 18;
-            windowStyle = new GUIStyle("window");
-            //GUI.skin.label.alignment = TextAnchor.UpperCenter;
+            if (Environment.UserName == "shalzuth") enabled = false;
         }
         void OnGUI()
         {
@@ -47,8 +40,14 @@ namespace TemSharp
             GUILayout.Label("If you downloaded this from anywhere but https://github.com/shalzuth/Tem" + "Sharp/releases/download/beta/Tem" + "Sharp.Loader.exe, you probably have a virus.", labelStyle);
             if (GUILayout.Button("Close Notice"))
                 enabled = false;
-            GUILayout.Label("I'm adding a notice, so I guess I'll add patch notes");
+            GUILayout.Label("", labelStyle);
+            GUILayout.Label("NOTE - there's a chance your account will be banned for cheating. Use with caution.", labelStyle);
+            GUILayout.Label("People have been banned for trading on flagged accounts", labelStyle);
+            GUILayout.Label("", labelStyle);
             GUILayout.Label("Patch Notes");
+            GUILayout.Label("Added shiny hunter configuration");
+            GUILayout.Label("", labelStyle);
+            GUILayout.Label("Old Patch Notes");
             GUILayout.Label("Teleporter - added right click to teleport in game while running around");
             GUILayout.Label("Zoom - removes beautifier effects so it doesn't get blurry");
             GUILayout.Label("Shiny Hunter - more stability, can disable gfx now, will select benched Tems when one dies");
@@ -58,10 +57,6 @@ namespace TemSharp
             if (GUILayout.Button("Discord Server (for learning and community, not support)"))
                 Application.OpenURL("https://discord.gg/799qSNR");
             GUI.DragWindow();
-        }
-        void OnEnable()
-        {
-            //Application.OpenURL("https://github.com/shalzuth/Tem" + "Sharp");
         }
     }
 }

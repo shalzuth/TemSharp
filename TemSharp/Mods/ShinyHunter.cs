@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Temtem.Core;
+using Temtem.Monsters;
 using Temtem.UI;
 using Temtem.World;
 using Sfs2X;
@@ -14,11 +15,12 @@ namespace TemSharp
 {
     public class ShinyHunter : MonoBehaviour
     {
-        Int32 tick = 0;
+        Int32 tick = Environment.TickCount;;
         Boolean needToEnterBattle = true;
         Boolean needToCloseLevelUpDelay = true;
         Boolean needToSelectBench = true;
         UInt64 BattleCount = 0;
+        Dictionary<Int16, MonsterStats> TemtemDict;
         SpawnZoneDefinition GetSpawnZone()
         {
             var spawnZoneDefList = typeof(WildMonstersLogic).GetField<WildMonstersLogic>().GetField<HashSet<SpawnZoneDefinition>>();
@@ -31,74 +33,148 @@ namespace TemSharp
             return null;
         }
         static Int32 Margin = 5;
-        static Int32 WindowWidth = 150;
+        static Int32 WindowWidth = 300;
         Int32 ShinyId;
-        Rect ShinyWindow = new Rect(Margin + WindowWidth + Margin, Margin, WindowWidth, 50);
+        Rect ShinyWindow;
+        Rect ConfigWindow;
         void Awake()
         {
+            TemtemDict = typeof(ConfigReader).GetField<ConfigReader>().GetField<Tempedia>().GetField<Dictionary<Int16, MonsterStats>>("temtemDict");
+               ShinyWindow = new Rect(Margin + 150 + Margin, Margin, WindowWidth, 50);
             ShinyId = GetHashCode();
         }
         void OnEnable()
         {
-            tick = Environment.TickCount;
             needToEnterBattle = needToCloseLevelUpDelay = true;
         }
         void OnGUI()
         {
             if (Cursor.visible)
-            {
                 ShinyWindow = GUILayout.Window(ShinyId, ShinyWindow, ShinyWindowMethod, "shiny hunter settings", GUILayout.ExpandHeight(true));
-            }
+            if (addingNewConfig)
+                ConfigWindow = GUILayout.Window(ShinyId + 1, ConfigWindow, ConfigWindowMethod, "configuration", GUILayout.ExpandHeight(true));
         }
-        Boolean fight = true;
-        Boolean luma = true;
-        Boolean disableGfx = false;
-        Single sv_hp = 0;
-        Single sv_stam = 0;
-        Single sv_atk = 0;
-        Single sv_def = 0;
-        Single sv_spatk = 0;
-        Single sv_spdef = 0;
-        Single sv_speed = 0;
+        Boolean addingNewConfig = false;
+        List<Criteria> CriteriaList = new List<Criteria>();
         void ShinyWindowMethod(Int32 id)
         {
             GUILayout.Label("battle # " + BattleCount);
             GUILayout.Label("time avg : " + ((Single)(Environment.TickCount - tick) / 1000 / (Single)BattleCount));
-            GUILayout.Label("needToEnterBattle " + needToEnterBattle);
-            GUILayout.Label("needToCloseLevelUpDelay " + needToCloseLevelUpDelay);
-            GUILayout.Label("needToSelectBench " + needToCloseLevelUpDelay);
             fight = GUILayout.Toggle(fight, fight ? "Fight" : "Flee");
-            luma = GUILayout.Toggle(luma, "Luma required");
             disableGfx = GUILayout.Toggle(disableGfx, "Disable gfx");
-            GUILayout.Label("sv minimums to stop");
+            var removedAny = false;
+            foreach(var c in CriteriaList)
+            {
+                GUILayout.BeginHorizontal();
+                var name = "Any";
+                if (TemtemDict.ContainsKey(c.monster_number)) name = TemtemDict[c.monster_number].OriginalName;
+                GUILayout.Label(name + (c.luma ? " Luma " : " Normal ") + c.sv_hp + " " + c.sv_stam + " " + c.sv_atk
+                    + " " + c.sv_def + " " + c.sv_spatk + " " + c.sv_spdef + " " + c.sv_speed);
+                if (GUILayout.Button("X"))
+                {
+                    removedAny = true;
+                    c.remove = true;
+                }
+                GUILayout.EndHorizontal();
+            }
+            if (removedAny)
+            {
+                CriteriaList.RemoveAll(r => r.remove);
+                ShinyWindow = new Rect(ShinyWindow.x, ShinyWindow.y, WindowWidth, 10);
+            }
+            if (GUILayout.Button("Add New Criteria"))
+            {
+                ConfigWindow = new Rect(ShinyWindow.x + ShinyWindow.width + Margin, ShinyWindow.y, WindowWidth, 50);
+                addingNewConfig = true;
+            }
+            if (GUILayout.Button(botting ? "Stop" : "Start")) botting = !botting;
+            GUI.DragWindow();
+        }
+        Boolean fight = true;
+        Boolean disableGfx = false;
+        Boolean botting = false;
+        String monster_name = "";
+        Int16 monster_number = 0;
+        Boolean luma = true;
+        Int32 sv_hp = 0;
+        Int32 sv_stam = 0;
+        Int32 sv_atk = 0;
+        Int32 sv_def = 0;
+        Int32 sv_spatk = 0;
+        Int32 sv_spdef = 0;
+        Int32 sv_speed = 0;
+        class Criteria
+        {
+            public Int16 monster_number;
+            public Boolean luma;
+            public Int32 sv_hp = 0;
+            public Int32 sv_stam = 0;
+            public Int32 sv_atk = 0;
+            public Int32 sv_def = 0;
+            public Int32 sv_spatk = 0;
+            public Int32 sv_spdef = 0;
+            public Int32 sv_speed = 0;
+            public String Passive;
+            public Boolean remove = false;
+        }
+        void ConfigWindowMethod(Int32 id)
+        {
+            monster_name = "Any";
+            if (TemtemDict.ContainsKey(monster_number)) monster_name = TemtemDict[monster_number].OriginalName;
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("monster name : " + monster_name);
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("monster number");
+            monster_number = Int16.Parse(GUILayout.TextField(monster_number.ToString()));
+            GUILayout.EndHorizontal();
+            luma = GUILayout.Toggle(luma, "Luma");
             GUILayout.BeginHorizontal();
             GUILayout.Label("hp");
-            sv_hp = GUILayout.HorizontalScrollbar(sv_hp, 1, 0, 50);
+            sv_hp = Int32.Parse(GUILayout.TextField(sv_hp.ToString()));
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
             GUILayout.Label("stam");
-            sv_stam = GUILayout.HorizontalScrollbar(sv_stam, 1, 0, 50);
+            sv_stam = Int32.Parse(GUILayout.TextField(sv_stam.ToString()));
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
             GUILayout.Label("atk");
-            sv_atk = GUILayout.HorizontalScrollbar(sv_atk, 1, 0, 50);
+            sv_atk = Int32.Parse(GUILayout.TextField(sv_atk.ToString()));
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
             GUILayout.Label("def");
-            sv_def = GUILayout.HorizontalScrollbar(sv_def, 1, 0, 50);
+            sv_def = Int32.Parse(GUILayout.TextField(sv_def.ToString()));
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
             GUILayout.Label("spatk");
-            sv_spatk = GUILayout.HorizontalScrollbar(sv_spatk, 1, 0, 50);
+            sv_spatk = Int32.Parse(GUILayout.TextField(sv_spatk.ToString()));
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
             GUILayout.Label("spdef");
-            sv_spdef = GUILayout.HorizontalScrollbar(sv_spdef, 1, 0, 50);
+            sv_spdef = Int32.Parse(GUILayout.TextField(sv_spdef.ToString()));
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
             GUILayout.Label("speed");
-            sv_speed = GUILayout.HorizontalScrollbar(sv_speed, 1, 0, 50);
+            sv_speed = Int32.Parse(GUILayout.TextField(sv_speed.ToString()));
             GUILayout.EndHorizontal();
+            if (GUILayout.Button("Add Criteria"))
+            {
+                addingNewConfig = false;
+                if (monster_number == 0 || TemtemDict.ContainsKey(monster_number))
+                    CriteriaList.Add(new Criteria
+                    {
+                        monster_number = monster_number,
+                        luma = luma,
+                        sv_hp = sv_hp,
+                        sv_stam = sv_stam,
+                        sv_atk = sv_atk,
+                        sv_def = sv_def,
+                        sv_spatk = sv_spatk,
+                        sv_spdef = sv_def,
+                        sv_speed = sv_speed,
+                        Passive = "todo"
+                    });
+            }
             GUI.DragWindow();
         }
         IEnumerator HealAndSpawnMonster(Single seconds)
@@ -164,6 +240,8 @@ namespace TemSharp
         void Update()
         {
             GfxToggle();
+            if (!botting)
+                return;
             var minimap = (MonoBehaviour)FindObjectsOfType<MinimapFogController>().FirstOrDefault();
             if (minimap == null) minimap = (MonoBehaviour)FindObjectsOfType<GenericMinimap>().FirstOrDefault();
             if (minimap != null && minimap.gameObject.activeInHierarchy)
@@ -195,17 +273,23 @@ namespace TemSharp
                             var monster = monsters[i];
                             if (monster == null) continue;
                             var detailedInfo = detailMonsters[i];
-                            if (monster.luma == luma
-                                && sv_hp <= (Single)detailedInfo.GetField<Int16>("hqoqompkoko")
-                                && sv_stam <= (Single)detailedInfo.GetField<Int16>("lkfqjncqjlh")
-                                && sv_atk <= (Single)detailedInfo.GetField<Int16>("feefnfjirce")
-                                && sv_def <= (Single)detailedInfo.GetField<Int16>("kgddimqgcgl")
-                                && sv_spatk <= (Single)detailedInfo.GetField<Int16>("qmnfcgkfkje")
-                                && sv_spdef <= (Single)detailedInfo.GetField<Int16>("foqcikgkjfi")
-                                && sv_speed <= (Single)detailedInfo.GetField<Int16>("ljpogjmlrhd"))
+                            foreach(var c in CriteriaList)
                             {
-                                enabled = false;
-                                return;
+                                if (c.monster_number == 0 || c.monster_number == monster.monsterNumber)
+                                    if (monster.luma == c.luma
+                                        && c.sv_hp <= (Single)detailedInfo.GetField<Int16>("hqoqompkoko")
+                                        && c.sv_stam <= (Single)detailedInfo.GetField<Int16>("lkfqjncqjlh")
+                                        && c.sv_atk <= (Single)detailedInfo.GetField<Int16>("feefnfjirce")
+                                        && c.sv_def <= (Single)detailedInfo.GetField<Int16>("kgddimqgcgl")
+                                        && c.sv_spatk <= (Single)detailedInfo.GetField<Int16>("qmnfcgkfkje")
+                                        && c.sv_spdef <= (Single)detailedInfo.GetField<Int16>("foqcikgkjfi")
+                                        && c.sv_speed <= (Single)detailedInfo.GetField<Int16>("ljpogjmlrhd"))
+                                    {
+                                        botting = false;
+                                        disableGfx = false;
+                                        GfxToggle();
+                                        return;
+                                    }
                             }
                             //Debug.Log(monster.rjflhcnqnif.OriginalName + " : " + (monster.hpfkeknnqiq ? "Shiny" : "Normal"));
                             //Debug.Log(monster.Nickname + " : " +monster.ToString());
@@ -233,6 +317,12 @@ namespace TemSharp
         }
         void GfxToggle()
         {
+            // buggy need to clean
+            //var worldCam = typeof(Temtem.MonstersCamera.WorldCamera).GetField<Temtem.MonstersCamera.WorldCamera>();
+            //if (worldCam != null && worldCam.gameObject != null)
+            //    worldCam.gameObject.SetActive(!disableGfx);
+            /* foreach(var pool in PathologicalGames.PoolManager.Pools)
+                pool.Value.gameObject.SetActive(!disableGfx);*/
             var toHide = FindObjectsOfType<Temtem.Utils.BattleZoneGameObjectToHide>();
             foreach (var hide in toHide)
                 hide.gameObject.SetActive(!disableGfx);
