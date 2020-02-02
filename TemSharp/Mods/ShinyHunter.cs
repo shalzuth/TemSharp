@@ -15,7 +15,7 @@ namespace TemSharp
 {
     public class ShinyHunter : MonoBehaviour
     {
-        Int32 tick = Environment.TickCount;;
+        Int32 tick = Environment.TickCount;
         Boolean needToEnterBattle = true;
         Boolean needToCloseLevelUpDelay = true;
         Boolean needToSelectBench = true;
