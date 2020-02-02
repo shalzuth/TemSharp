@@ -64,9 +64,6 @@ namespace TemSharp.Loader
                 Status.Text = "Injecting - Game @ " + unityDllPath;
                 Compiler.UpdateSources();
                 Injector.Inject(gameProcName, Compiler.CompileDll(randString), randString, "Init", "Load");
-                System.IO.File.Delete(randString + ".dll");
-                if (System.IO.File.Exists(randString + ".pdb"))
-                    System.IO.File.Delete(randString + ".pdb");
                 Status.Text = "Injected, closing app shortly";
                 //Thread.Sleep(10000);
                 Environment.Exit(0);

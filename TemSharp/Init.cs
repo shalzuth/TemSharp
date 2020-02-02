@@ -27,6 +27,7 @@ namespace TemSharp
                 var component = (UnityEngine.MonoBehaviour)BaseObject.AddComponent(type);
                 component.enabled = false;
             }
+            BaseObject.GetComponent<Notice>().enabled = true;
             BaseObject.GetComponent<Menu>().enabled = true;
             BaseObject.SetActive(true);
         }

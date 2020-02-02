@@ -36,17 +36,20 @@ Mod will:
 * Start fight
 * Fight or Flee
 * Repeat until a Shiny Pokeman is found, or minimum SV values are found
+Has option to disable graphics during battle.
 
 ## Speed
 Speeds up the game. Could be modified to make it go slower if there are requests.
 
 ## Teleporter
-Right Click on Map to Teleport to location (only use on World)
+Don't use in buildings/caverns
+Right Click on map to teleport to location
+Right Click on ground to teleport to mouse
 
 Using the numpad, 2, 4, 6, 8 will teleport you a couple blocks away.
 
 ## Zoom
-Pulls Mr Cameraman back a bit.
+Pulls Mr Cameraman back a bit. And cleans up the blur effect.
 
 ## Remove Name
 Removes your name from appearing on the HUD.

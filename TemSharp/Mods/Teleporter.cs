@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
+using Temtem.UI;
 namespace TemSharp
 {
     public class Teleporter : MonoBehaviour
@@ -21,6 +22,26 @@ namespace TemSharp
                     UnityEngine.AI.NavMeshHit navHit;
                     UnityEngine.AI.NavMesh.SamplePosition(newTarget, out navHit, 200, UnityEngine.AI.NavMesh.AllAreas);
                     Temtem.Network.NetworkLogic.nkqrjhelndm.elennjqknrp(Temtem.Network.NetworkLogic.nkqrjhelndm.npqcecmqpio, navHit.position);
+                }
+                else
+                {
+                    var minimap = (MonoBehaviour)FindObjectsOfType<MinimapFogController>().FirstOrDefault();
+                    if (minimap == null) minimap = (MonoBehaviour)FindObjectsOfType<GenericMinimap>().FirstOrDefault();
+                    if (minimap != null && minimap.gameObject.activeInHierarchy)
+                    {
+                        var pos = Input.mousePosition;
+                        pos.z = typeof(Temtem.Configuration.VisualSettings).GetField<Single>("cameraDistance");
+                        var playerPlane = new Plane(Vector3.up, position);
+                        var ray = Camera.allCameras[0].ScreenPointToRay(pos);
+                        var hitdist = 0.0f;
+                        if (playerPlane.Raycast(ray, out hitdist))
+                        {
+                            var clickPosition = ray.GetPoint(hitdist);
+                            UnityEngine.AI.NavMeshHit navHit;
+                            UnityEngine.AI.NavMesh.SamplePosition(clickPosition, out navHit, 200, UnityEngine.AI.NavMesh.AllAreas);
+                            Temtem.Network.NetworkLogic.nkqrjhelndm.elennjqknrp(Temtem.Network.NetworkLogic.nkqrjhelndm.npqcecmqpio, navHit.position);
+                        }
+                    }
                 }
             }
             var teleportDistance = 5;

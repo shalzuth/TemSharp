@@ -5,11 +5,14 @@ namespace TemSharp
 {
     public class Zoom : MonoBehaviour
     {
-        Single MinValue = 7;
-        Single MaxValue = 20;
+        Single MinValue = 2;
+        Single MaxValue = 40;
         Single ScalingValue = 7;
         void OnEnable()
         {
+            Camera.allCameras[0].GetComponent<BeautifyEffect.Beautify>().enabled = false;
+            Camera.allCameras[0].GetComponent<HxVolumetricImageEffectOpaque>().enabled = false;
+            Camera.allCameras[0].GetComponent<UnityEngine.Rendering.PostProcessing.PostProcessLayer>().enabled = false;
             Menu.ScalingOptions.Add(GetType());
         }
         void Update()
@@ -27,6 +30,9 @@ namespace TemSharp
         void OnDisable()
         {
             typeof(Temtem.Configuration.VisualSettings).SetField("cameraDistance", 7);
+            Camera.allCameras[0].GetComponent<BeautifyEffect.Beautify>().enabled = true;
+            Camera.allCameras[0].GetComponent<HxVolumetricImageEffectOpaque>().enabled = true;
+            Camera.allCameras[0].GetComponent<UnityEngine.Rendering.PostProcessing.PostProcessLayer>().enabled = true;
             Menu.ScalingOptions.Remove(GetType());
         }
     }

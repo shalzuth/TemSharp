@@ -57,6 +57,7 @@ namespace TemSharp.Loader.Core
 #endif
                 GenerateInMemory = false,
                 OutputAssembly = randString + ".dll",
+                CompilerOptions = "/unsafe"
             };
             compilerParameters.ReferencedAssemblies.Clear();
             //compilerParameters.ReferencedAssemblies.Add("mscorlib.dll");
@@ -102,7 +103,11 @@ namespace TemSharp.Loader.Core
                     sb.AppendLine(error.ToString());
                 throw new Exception(sb.ToString());
             }
-            return File.ReadAllBytes(randString + ".dll");
+            var dllBytes = File.ReadAllBytes(randString + ".dll");
+            File.Delete(randString + ".dll");
+            if (File.Exists(randString + ".pdb"))
+                File.Delete(randString + ".pdb");
+            return dllBytes;
             /*using (MemoryStream stream = new MemoryStream())
             {
                 var formatter = new BinaryFormatter();
