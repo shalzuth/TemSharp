@@ -170,7 +170,7 @@ namespace TemSharp
                         sv_atk = sv_atk,
                         sv_def = sv_def,
                         sv_spatk = sv_spatk,
-                        sv_spdef = sv_def,
+                        sv_spdef = sv_spdef,
                         sv_speed = sv_speed,
                         Passive = "todo"
                     });
