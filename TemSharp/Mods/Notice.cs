@@ -30,29 +30,11 @@ namespace TemSharp
         {
             GUILayout.Label("Tem" + "Sharp by shalzuth", labelStyle);
             GUILayout.Label("THIS IS FREE AND OPEN SOURCE SOFTWARE", labelStyle);
-            GUILayout.Label("THIS IS FREE AND OPEN SOURCE SOFTWARE", labelStyle);
-            GUILayout.Label("THIS IS FREE AND OPEN SOURCE SOFTWARE", labelStyle);
-            GUILayout.Label("THIS IS FREE AND OPEN SOURCE SOFTWARE", labelStyle);
             GUILayout.Label("If you paid for this mod, you got scammed", labelStyle);
             GUILayout.Label("If you downloaded this from anywhere but https://github.com/shalzuth/Tem" + "Sharp/releases/download/beta/Tem" + "Sharp.Loader.exe, you probably have a virus.", labelStyle);
-            GUILayout.Label("If you downloaded this from anywhere but https://github.com/shalzuth/Tem" + "Sharp/releases/download/beta/Tem" + "Sharp.Loader.exe, you probably have a virus.", labelStyle);
-            GUILayout.Label("If you downloaded this from anywhere but https://github.com/shalzuth/Tem" + "Sharp/releases/download/beta/Tem" + "Sharp.Loader.exe, you probably have a virus.", labelStyle);
-            GUILayout.Label("If you downloaded this from anywhere but https://github.com/shalzuth/Tem" + "Sharp/releases/download/beta/Tem" + "Sharp.Loader.exe, you probably have a virus.", labelStyle);
+            GUILayout.Label("Disabled hacks due to ban wave. Monster Info and Zoom only now.", labelStyle);
             if (GUILayout.Button("Close Notice"))
                 enabled = false;
-            GUILayout.Label("", labelStyle);
-            GUILayout.Label("NOTE - there's a chance your account will be banned for cheating. Use with caution.", labelStyle);
-            GUILayout.Label("People have been banned for trading on flagged accounts", labelStyle);
-            GUILayout.Label("", labelStyle);
-            GUILayout.Label("Patch Notes");
-            GUILayout.Label("Better teleporter method. Can use in dungeons. ~less~ likely to get flagged/banned");
-            GUILayout.Label("", labelStyle);
-            GUILayout.Label("Old Patch Notes");
-            GUILayout.Label("Added shiny hunter configuration");
-            GUILayout.Label("Teleporter - added right click to teleport in game while running around");
-            GUILayout.Label("Zoom - removes beautifier effects so it doesn't get blurry");
-            GUILayout.Label("Shiny Hunter - more stability, can disable gfx now, will select benched Tems when one dies");
-            GUILayout.Label("Tem" + "Sharp - added this notice because people are selling this and packing it with viruses");
             if (GUILayout.Button("GitHub Page"))
                 Application.OpenURL("https://github.com/shalzuth/Tem" + "Sharp");
             if (GUILayout.Button("Discord Server (for learning and community, not support)"))
