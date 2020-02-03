@@ -2,6 +2,7 @@
 using System.Linq;
 using UnityEngine;
 using Temtem.UI;
+using Temtem.Players;
 namespace TemSharp
 {
     public class Teleporter : MonoBehaviour
@@ -11,7 +12,7 @@ namespace TemSharp
             var position = Temtem.Players.LocalPlayerAvatar.nkqrjhelndm.qqhqkomhdoq;
             if (Input.GetMouseButtonDown(1))
             {
-                var obj = FindObjectsOfType<Temtem.UI.InGameMapUI>().FirstOrDefault();
+                var obj = FindObjectsOfType<InGameMapUI>().FirstOrDefault();
                 if (obj != null && obj.transform.GetChild(0).gameObject.activeInHierarchy)
                 {
                     var mapCenterOffset = -obj.GetField<Vector2>("hqkopqprqfl") / 10;
@@ -21,7 +22,8 @@ namespace TemSharp
                     var newTarget = new Vector3(position.x + newX + mapCenterOffset.x, position.y + 100, position.z + newY + mapCenterOffset.y);
                     UnityEngine.AI.NavMeshHit navHit;
                     UnityEngine.AI.NavMesh.SamplePosition(newTarget, out navHit, 200, UnityEngine.AI.NavMesh.AllAreas);
-                    Temtem.Network.NetworkLogic.nkqrjhelndm.elennjqknrp(Temtem.Network.NetworkLogic.nkqrjhelndm.npqcecmqpio, navHit.position);
+                    //Temtem.Network.NetworkLogic.nkqrjhelndm.elennjqknrp(Temtem.Network.NetworkLogic.nkqrjhelndm.npqcecmqpio, navHit.position);
+                    typeof(LocalPlayerAvatar).GetField<LocalPlayerAvatar>().gameObject.GetComponent<PlayerMovement>().cimqnlfephf(navHit.position);
                 }
                 else
                 {
@@ -39,24 +41,25 @@ namespace TemSharp
                             var clickPosition = ray.GetPoint(hitdist);
                             UnityEngine.AI.NavMeshHit navHit;
                             UnityEngine.AI.NavMesh.SamplePosition(clickPosition, out navHit, 200, UnityEngine.AI.NavMesh.AllAreas);
-                            Temtem.Network.NetworkLogic.nkqrjhelndm.elennjqknrp(Temtem.Network.NetworkLogic.nkqrjhelndm.npqcecmqpio, navHit.position);
+                            //Temtem.Network.NetworkLogic.nkqrjhelndm.elennjqknrp(Temtem.Network.NetworkLogic.nkqrjhelndm.npqcecmqpio, navHit.position);
+                            typeof(LocalPlayerAvatar).GetField<LocalPlayerAvatar>().gameObject.GetComponent<PlayerMovement>().cimqnlfephf(navHit.position);
                         }
                     }
                 }
             }
-            var teleportDistance = 5;
+            var teleportDistance = 1;
             if (Input.GetKeyDown(KeyCode.Keypad4))
-                Temtem.Network.NetworkLogic.nkqrjhelndm.elennjqknrp(Temtem.Network.NetworkLogic.nkqrjhelndm.npqcecmqpio, new Vector3(position.x - teleportDistance, position.y, position.z));
+                typeof(LocalPlayerAvatar).GetField<LocalPlayerAvatar>().gameObject.GetComponent<PlayerMovement>().cimqnlfephf(new Vector3(position.x - teleportDistance, position.y, position.z));
             if (Input.GetKeyDown(KeyCode.Keypad6))
-                Temtem.Network.NetworkLogic.nkqrjhelndm.elennjqknrp(Temtem.Network.NetworkLogic.nkqrjhelndm.npqcecmqpio, new Vector3(position.x + teleportDistance, position.y, position.z));
+                typeof(LocalPlayerAvatar).GetField<LocalPlayerAvatar>().gameObject.GetComponent<PlayerMovement>().cimqnlfephf(new Vector3(position.x + teleportDistance, position.y, position.z));
             if (Input.GetKeyDown(KeyCode.Keypad8))
-                Temtem.Network.NetworkLogic.nkqrjhelndm.elennjqknrp(Temtem.Network.NetworkLogic.nkqrjhelndm.npqcecmqpio, new Vector3(position.x, position.y, position.z + teleportDistance));
+                typeof(LocalPlayerAvatar).GetField<LocalPlayerAvatar>().gameObject.GetComponent<PlayerMovement>().cimqnlfephf(new Vector3(position.x, position.y, position.z + teleportDistance));
             if (Input.GetKeyDown(KeyCode.Keypad2))
-                Temtem.Network.NetworkLogic.nkqrjhelndm.elennjqknrp(Temtem.Network.NetworkLogic.nkqrjhelndm.npqcecmqpio, new Vector3(position.x, position.y, position.z - teleportDistance));
+                typeof(LocalPlayerAvatar).GetField<LocalPlayerAvatar>().gameObject.GetComponent<PlayerMovement>().cimqnlfephf(new Vector3(position.x, position.y, position.z - teleportDistance));
             if (Input.GetKeyDown(KeyCode.Keypad7))
-                Temtem.Network.NetworkLogic.nkqrjhelndm.elennjqknrp(Temtem.Network.NetworkLogic.nkqrjhelndm.npqcecmqpio, new Vector3(position.x, position.y + teleportDistance, position.z));
+                typeof(LocalPlayerAvatar).GetField<LocalPlayerAvatar>().gameObject.GetComponent<PlayerMovement>().cimqnlfephf(new Vector3(position.x, position.y + teleportDistance, position.z));
             if (Input.GetKeyDown(KeyCode.Keypad1))
-                Temtem.Network.NetworkLogic.nkqrjhelndm.elennjqknrp(Temtem.Network.NetworkLogic.nkqrjhelndm.npqcecmqpio, new Vector3(position.x, position.y - teleportDistance, position.z));
+                typeof(LocalPlayerAvatar).GetField<LocalPlayerAvatar>().gameObject.GetComponent<PlayerMovement>().cimqnlfephf(new Vector3(position.x, position.y - teleportDistance, position.z));
         }
     }
 }

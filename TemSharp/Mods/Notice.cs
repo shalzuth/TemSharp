@@ -45,9 +45,10 @@ namespace TemSharp
             GUILayout.Label("People have been banned for trading on flagged accounts", labelStyle);
             GUILayout.Label("", labelStyle);
             GUILayout.Label("Patch Notes");
-            GUILayout.Label("Added shiny hunter configuration");
+            GUILayout.Label("Better teleporter method. Can use in dungeons. ~less~ likely to get flagged/banned");
             GUILayout.Label("", labelStyle);
             GUILayout.Label("Old Patch Notes");
+            GUILayout.Label("Added shiny hunter configuration");
             GUILayout.Label("Teleporter - added right click to teleport in game while running around");
             GUILayout.Label("Zoom - removes beautifier effects so it doesn't get blurry");
             GUILayout.Label("Shiny Hunter - more stability, can disable gfx now, will select benched Tems when one dies");
