@@ -1,3 +1,6 @@
+## Don't run this as is
+You will get banned. There is new anti-cheat. My private closed-source platform (temsharp.com) bypasses this.
+
 ## How to Run
 - Download https://github.com/shalzuth/TemSharp/releases/download/beta/TemSharp.Loader.exe
 - Launch Game
